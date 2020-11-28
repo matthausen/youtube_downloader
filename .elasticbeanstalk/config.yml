@@ -1,0 +1,19 @@
+branch-defaults:
+  develop:
+    environment: youtube-music-app-dev
+global:
+  application_name: youtube-music-app
+  branch: null
+  default_ec2_keyname: null
+  default_platform: Python 3.7 running on 64bit Amazon Linux 2
+  default_region: eu-west-2
+  include_git_submodules: true
+  instance_profile: null
+  platform_name: null
+  platform_version: null
+  profile: null
+  repository: null
+  sc: git
+  workspace_type: Application
+deploy:
+  artifact: ./Archive.zip
