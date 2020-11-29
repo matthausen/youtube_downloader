@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
+import axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Box from '@material-ui/core/Box'
@@ -33,6 +34,22 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SearchBar() {
   const classes = useStyles();
+  const [track, setTrack] = useState();
+
+  const baseUrl = 'http://127.0.0.1:5000';
+
+  useEffect(() => {
+    axios.post(`${baseUrl}/api/fetch-songs`, track, {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      }})
+    .then(res => console.log(res.data))
+  },[track])
+
+  const handleSongSearch = e => {
+    setTrack(e.target.value);
+  }
 
   return (
     <Container>
@@ -43,6 +60,7 @@ export default function SearchBar() {
           </IconButton>
           <InputBase
             className={classes.input}
+            onChange={handleSongSearch}
             placeholder="Search for a song or an artist"
             inputProps={{ 'aria-label': 'search song or artist' }}
           />
