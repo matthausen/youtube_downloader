@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -10,6 +10,7 @@ import IconButton from '@material-ui/core/IconButton';
 import AlbumIcon from '@material-ui/icons/Album';
 import SearchIcon from '@material-ui/icons/Search';
 import MusicNoteIcon from '@material-ui/icons/MusicNote';
+import TracksList from '../List';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -35,32 +36,36 @@ const useStyles = makeStyles((theme) => ({
 export default function SearchBar() {
   const classes = useStyles();
   const [track, setTrack] = useState();
+  const [results, setResults] = useState();
 
   const baseUrl = 'http://127.0.0.1:5000';
 
-  useEffect(() => {
+  const handleChange = e => {
+    setTrack(e.target.value);
+  }
+
+  const handleSubmit = e => {
+    e.preventDefault();
     axios.post(`${baseUrl}/api/fetch-songs`, track, {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-      }})
-    .then(res => console.log(res.data))
-  },[track])
-
-  const handleSongSearch = e => {
-    setTrack(e.target.value);
+      }
+    })
+      .then(res => setResults(res.data))
   }
 
   return (
     <Container>
       <Box p={6}>
-        <Paper component="form" className={classes.root}>
+        <Paper component="form" className={classes.root} onSubmit={handleSubmit}>
           <IconButton className={classes.iconButton} aria-label="menu">
             <AlbumIcon />
           </IconButton>
           <InputBase
+            autoFocus
             className={classes.input}
-            onChange={handleSongSearch}
+            onChange={handleChange}
             placeholder="Search for a song or an artist"
             inputProps={{ 'aria-label': 'search song or artist' }}
           />
@@ -73,6 +78,7 @@ export default function SearchBar() {
           </IconButton>
         </Paper>
       </Box>
+      {results ? <TracksList tracks={results} /> : null}
     </Container>
   );
 }
