@@ -2,17 +2,23 @@ Domain: youtubemusicdownload.app
 
 ## Deployment
 
+Refer to this guide for deployment: 
+https://adamraudonis.medium.com/how-to-deploy-a-website-on-aws-with-docker-flask-react-from-scratch-d0845ebd9da4
 
-AWS Elastic Beanstalk configuration. Using the awscli and the ebcli:
+ECS + docker for the service
+S3 for the frontend
+Route55 for the domain
+CDN
 
-Initiate the environemtn on ElasticBeanstalk with Python 3.6
-- `eb init -p -python-3.6 youtube-music-download --region eu-west-2`
+## TODO:
 
-- `eb init`
 
-Create the environment for the application
-- `eb create`
+- Select multiple song and create a virtual list of songs to be downloaded all at once
 
-- `eb deploy`
+- Trigger the download in the browser
 
-- `eb open`
+- Functionality to download individually in browser
+
+- Plugin in Google Analytics
+
+- Deployment: Refer to point above
