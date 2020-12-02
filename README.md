@@ -1,10 +1,5 @@
 Domain: youtubemusicdownload.app
 
-## Local development
-
-replace with the final API endpoint
-export API_URL=http://127.0.0.1:5000 
-
 ## Deployment
 
 Refer to this guide for deployment: 
@@ -17,11 +12,9 @@ CDN
 
 ## TODO:
 
-- Select multiple song and create a virtual list of songs to be downloaded all at once
+- Select multiple song and create a virtual list (chips component) of songs to be downloaded all at once
 
 - Trigger the download in the browser. The music is doewnloaded on a file storage and then provided to the FE via send_file flask method
-
-- Functionality to download individually
 
 - Plug in in Google Analytics
 
