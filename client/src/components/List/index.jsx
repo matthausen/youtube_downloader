@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Box from '@material-ui/core/Box';
@@ -36,6 +37,16 @@ export default function TracksList({ tracks }) {
     setChecked(newChecked);
   };
 
+  const handleDownload = songId => {
+    const API_URL = 'http://127.0.0.1:5000';
+    axios.post(`${API_URL}/api/download-songs`, songId, {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      }
+    })
+  }
+
   return (
     <Container maxWidth="lg">
       <Box p={6}>
@@ -60,7 +71,7 @@ export default function TracksList({ tracks }) {
                   <ListItemText id={labelId} primary={`${title}`} />
                   <ListItemSecondaryAction>
                     <IconButton edge="end" aria-label="comments">
-                      <GetAppIcon />
+                      <GetAppIcon onClick={() => handleDownload(id)} />
                     </IconButton>
                   </ListItemSecondaryAction>
                 </ListItem>
