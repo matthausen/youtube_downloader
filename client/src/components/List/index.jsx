@@ -56,7 +56,7 @@ export default function TracksList({ tracks }) {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       }
-    })
+    }).then(res => console.log(res));
   }
 
   return (
