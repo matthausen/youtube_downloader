@@ -4,6 +4,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Box from '@material-ui/core/Box';
 import Paper from '@material-ui/core/Paper';
+import Chip from '@material-ui/core/Chip';
+import Avatar from '@material-ui/core/Avatar';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -18,15 +20,25 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     backgroundColor: theme.palette.background.paper,
   },
+  chips: {
+    display: 'flex',
+    justifyContent: 'center',
+    flexWrap: 'wrap',
+    '& > *': {
+      margin: theme.spacing(0.5),
+    },
+  },
 }));
 
 export default function TracksList({ tracks }) {
   const classes = useStyles();
-  const [checked, setChecked] = React.useState([0]);
+  const [checked, setChecked] = React.useState([]);
 
-  const handleToggle = (value) => () => {
+  const handleToggle = value => () => {
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];
+
+    console.log(checked)
 
     if (currentIndex === -1) {
       newChecked.push(value);
@@ -50,6 +62,21 @@ export default function TracksList({ tracks }) {
   return (
     <Container maxWidth="lg">
       <Box p={6}>
+        {checked && checked.length > 0 ?
+          checked.map(t => {
+            console.log(t);
+            return (
+              <div className={classes.chips}>
+                <Chip
+                  avatar={<Avatar alt="Song" src={t.thumbnails[0]} />}
+                  label={t.title}
+                  onDelete={() => console.log(`You clicked on ${t}`)}
+                  color="secondary"
+                />
+              </div>
+            )
+          }
+          ) : null}
         <Paper>
           <List className={classes.root}>
             {tracks.videos.map((value) => {

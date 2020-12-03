@@ -12,9 +12,9 @@ CDN
 
 ## TODO:
 
-- Select multiple song and create a virtual list (chips component) of songs to be downloaded all at once
+- Bugfix: The file is downloaded ion m4a or webm format instead of .mp3
 
-- Trigger the download in the browser. The music is doewnloaded on a file storage and then provided to the FE via send_file flask method
+- Trigger the download in the browser. The music is downloaded on a file storage and then provided to the FE via send_file flask method
 
 - Plug in in Google Analytics
 
