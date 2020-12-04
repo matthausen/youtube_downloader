@@ -14,11 +14,20 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
 import GetAppIcon from '@material-ui/icons/GetApp';
+import ClearAllIcon from '@material-ui/icons/ClearAll';
+import Tooltip from '@material-ui/core/Tooltip';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
     backgroundColor: theme.palette.background.paper,
+  },
+  actions: {
+    display: 'flex',
+    justifyContent: "center",
+    alignItems: "center",
+    padding: theme.spacing(4),
   },
   chips: {
     display: 'flex',
@@ -28,6 +37,14 @@ const useStyles = makeStyles((theme) => ({
       margin: theme.spacing(0.5),
     },
   },
+  clearAllIcon: {
+    margin: 10,
+    fontSize: "2rem"
+  },
+  downlaodIcon: {
+    margin: 10,
+    fontSize: '2em'
+  }
 }));
 
 export default function TracksList({ tracks }) {
@@ -37,8 +54,6 @@ export default function TracksList({ tracks }) {
   const handleToggle = value => () => {
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];
-
-    console.log(checked)
 
     if (currentIndex === -1) {
       newChecked.push(value);
@@ -59,29 +74,47 @@ export default function TracksList({ tracks }) {
     }).then(res => console.log(res));
   }
 
+  const handleDeleteFromList = song => {
+    const currentIndex = checked.indexOf(song);
+    const newChecked = [...checked];
+    newChecked.splice(currentIndex, 1);
+    setChecked(newChecked);
+  }
+
+  const handleClearAll = () => setChecked([]);
+
   return (
     <Container maxWidth="lg">
       <Box p={6}>
         {checked && checked.length > 0 ?
-          checked.map(t => {
-            console.log(t);
-            return (
+          (
+            <Box>
               <div className={classes.chips}>
-                <Chip
-                  avatar={<Avatar alt="Song" src={t.thumbnails[0]} />}
-                  label={t.title}
-                  onDelete={() => console.log(`You clicked on ${t}`)}
-                  color="secondary"
-                />
+                {checked.map(song =>
+                  <Chip
+                    avatar={<Avatar alt="Song" src={song.thumbnails[0]} />}
+                    label={song.title}
+                    onDelete={() => handleDeleteFromList(song)}
+                    color="secondary"
+                  />
+                )}
               </div>
-            )
-          }
-          ) : null}
+              <div className={classes.actions}>
+                <Tooltip title="Download All" aria-label="download-all">
+                  <GetAppIcon className={classes.downlaodIcon} color="secondary" onClick={() => handleDownload(checked.map(song => song.id))} />
+                </Tooltip>
+                <Tooltip title="Clear All" aria-label="clear-all">
+                  <ClearAllIcon className={classes.clearAllIcon} color="secondary" onClick={handleClearAll} />
+                </Tooltip>
+              </div>
+            </Box>
+          ) : null
+        }
         <Paper>
           <List className={classes.root}>
-            {tracks.videos.map((value) => {
+            {tracks.videos.map(value => {
 
-              const { id, title, duration, channel, views } = value;
+              const { id, title } = value; //more props: duration, channel, views
               const labelId = `checkbox-list-label-${title}`;
 
               return (
@@ -97,9 +130,11 @@ export default function TracksList({ tracks }) {
                   </ListItemIcon>
                   <ListItemText id={labelId} primary={`${title}`} />
                   <ListItemSecondaryAction>
+                  <Tooltip title="Download song" aria-label="download-song">
                     <IconButton edge="end" aria-label="comments">
-                      <GetAppIcon onClick={() => handleDownload(id)} />
+                      <GetAppIcon onClick={() => handleDownload([id])} />
                     </IconButton>
+                  </Tooltip>
                   </ListItemSecondaryAction>
                 </ListItem>
               );

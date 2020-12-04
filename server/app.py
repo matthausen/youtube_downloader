@@ -16,7 +16,7 @@ def getSongs():
     results = YoutubeSearch(search_term, max_results=20).to_json()
     return results
 
-
+# download_songs method always expects a list of song ids, wheter single or multiple    download
 @app.route("/api/download-songs", methods=["POST"])
 def download_songs():
   if request.method == "POST":
@@ -30,25 +30,25 @@ def download_songs():
         'preferredcodec': 'mp3',
         'preferredquality': '192',
       }],
-      'outtmpl': 'myfile.mp3',
+      'outtmpl': 'tracks/%(title)s.%(ext)s',
     }
-    song_list = []
-    song_list.append(body)
+    song_list = eval(body)
     for song in song_list:
       try:
         url = 'https://www.youtube.com/watch?v=' + song
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
           ydl.download([url])
           # TODO
-          # Store the files in a folder
           # Do the conversion if the file is not .mp3
-          # AudioSegment.from_file("/input/file").export("/output/file", format="mp3")
-          # Return the file to the frontend
-          return send_file('myfile.mp3', as_attachment=True)
+          # AudioSegment.from_file("/tracks/file").export("/output/file", format="mp3")
           # Delete the file from the server
-          #return Response("File successfully downloaded to server", status=200, mimetype='application/json')
       except Exception as e:
         return Response("Failed to download track", status=500, mimetype='application/json')
+    
+    # Return the actual file or files to the frontend
+    #return send_file('myfile.mp3', as_attachment=True)
+    return Response("Success", status=200, mimetype='application/json')
+    
 
 if __name__ == '__main__':
   app.run(use_reloader=True, port=5000, threaded=True)

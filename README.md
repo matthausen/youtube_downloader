@@ -20,6 +20,10 @@ CDN
 
 - Add user feedback (snackbar) when download is in progress and done.
 
+- browser logo
+
 - Plug in in Google Analytics
 
 - Deployment: Refer to point above
+
+- Customise theme
