@@ -38,15 +38,14 @@ export default function SearchBar() {
   const [track, setTrack] = useState();
   const [results, setResults] = useState();
 
-  const baseUrl = 'http://127.0.0.1:5000';
-
   const handleChange = e => {
     setTrack(e.target.value);
   }
 
   const handleSubmit = e => {
     e.preventDefault();
-    axios.post(`${baseUrl}/api/fetch-songs`, track, {
+    const API_URL = 'http://127.0.0.1:5000';
+    axios.post(`${API_URL}/api/fetch-songs`, track, {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',

@@ -1,8 +1,11 @@
 import React from 'react';
+import axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Box from '@material-ui/core/Box';
 import Paper from '@material-ui/core/Paper';
+import Chip from '@material-ui/core/Chip';
+import Avatar from '@material-ui/core/Avatar';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -11,19 +14,44 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
 import GetAppIcon from '@material-ui/icons/GetApp';
+import ClearAllIcon from '@material-ui/icons/ClearAll';
+import Tooltip from '@material-ui/core/Tooltip';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
     backgroundColor: theme.palette.background.paper,
   },
+  actions: {
+    display: 'flex',
+    justifyContent: "center",
+    alignItems: "center",
+    padding: theme.spacing(4),
+  },
+  chips: {
+    display: 'flex',
+    justifyContent: 'center',
+    flexWrap: 'wrap',
+    '& > *': {
+      margin: theme.spacing(0.5),
+    },
+  },
+  clearAllIcon: {
+    margin: 10,
+    fontSize: "2rem"
+  },
+  downlaodIcon: {
+    margin: 10,
+    fontSize: '2em'
+  }
 }));
 
 export default function TracksList({ tracks }) {
   const classes = useStyles();
-  const [checked, setChecked] = React.useState([0]);
+  const [checked, setChecked] = React.useState([]);
 
-  const handleToggle = (value) => () => {
+  const handleToggle = value => () => {
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];
 
@@ -36,14 +64,57 @@ export default function TracksList({ tracks }) {
     setChecked(newChecked);
   };
 
+  const handleDownload = songId => {
+    const API_URL = 'http://127.0.0.1:5000';
+    axios.post(`${API_URL}/api/download-songs`, songId, {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      }
+    }).then(res => console.log(res));
+  }
+
+  const handleDeleteFromList = song => {
+    const currentIndex = checked.indexOf(song);
+    const newChecked = [...checked];
+    newChecked.splice(currentIndex, 1);
+    setChecked(newChecked);
+  }
+
+  const handleClearAll = () => setChecked([]);
+
   return (
     <Container maxWidth="lg">
       <Box p={6}>
+        {checked && checked.length > 0 ?
+          (
+            <Box>
+              <div className={classes.chips}>
+                {checked.map(song =>
+                  <Chip
+                    avatar={<Avatar alt="Song" src={song.thumbnails[0]} />}
+                    label={song.title}
+                    onDelete={() => handleDeleteFromList(song)}
+                    color="secondary"
+                  />
+                )}
+              </div>
+              <div className={classes.actions}>
+                <Tooltip title="Download All" aria-label="download-all">
+                  <GetAppIcon className={classes.downlaodIcon} color="secondary" onClick={() => handleDownload(checked.map(song => song.id))} />
+                </Tooltip>
+                <Tooltip title="Clear All" aria-label="clear-all">
+                  <ClearAllIcon className={classes.clearAllIcon} color="secondary" onClick={handleClearAll} />
+                </Tooltip>
+              </div>
+            </Box>
+          ) : null
+        }
         <Paper>
           <List className={classes.root}>
-            {tracks.videos.map((value) => {
+            {tracks.videos.map(value => {
 
-              const { id, title, duration, channel, views } = value;
+              const { id, title } = value; //more props: duration, channel, views
               const labelId = `checkbox-list-label-${title}`;
 
               return (
@@ -59,9 +130,11 @@ export default function TracksList({ tracks }) {
                   </ListItemIcon>
                   <ListItemText id={labelId} primary={`${title}`} />
                   <ListItemSecondaryAction>
+                  <Tooltip title="Download song" aria-label="download-song">
                     <IconButton edge="end" aria-label="comments">
-                      <GetAppIcon />
+                      <GetAppIcon onClick={() => handleDownload([id])} />
                     </IconButton>
+                  </Tooltip>
                   </ListItemSecondaryAction>
                 </ListItem>
               );
