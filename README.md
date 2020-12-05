@@ -12,16 +12,19 @@ CDN
 
 ## TODO:
 
-- Bugfix: The file is downloaded ion m4a or webm format instead of .mp3
+
+- Save file to S3 bucket
+
+- Conversion from m4a or webm to .mp3 (aws lambda trigger)
 
 - Trigger download in the browser.
 
 - Add user feedback (snackbar) when download is in progress and done.
 
-- browser logo
-
 - Plug in in Google Analytics
 
-- Deployment: Refer to point above
+- Deployment: AWS ECS (contasiners) vs ElasticBeanStalk
+
+- browser logo
 
 - Customise theme
