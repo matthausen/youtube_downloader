@@ -46,11 +46,13 @@ def download_songs():
       try:
         url = 'https://www.youtube.com/watch?v=' + song
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+          ydl.download([url])
           info = ydl.extract_info(url, False)
-          song_title = info['title']
+          song_title = info['title'].replace('/','-')
           song_format = info['formats'][0]['ext']
           for file in glob.glob('./tmp/*.webm'):
             s3.meta.client.upload_file(file, S3_BUCKET, '{}.{}'.format(song_title, song_format))
+            os.remove(file)
       except Exception as e:
         return Response("Failed to download track", status=500, mimetype='application/json')
 
