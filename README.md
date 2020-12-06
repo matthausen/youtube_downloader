@@ -15,9 +15,11 @@ CDN
 
 - Save file to S3 bucket
 
-- Conversion from m4a or webm to .mp3 (aws lambda trigger)
+- Conversion from m4a or webm to .mp3 (aws lambda trigger) - pydub AudioSegment.from_file("/tracks/file").export("/output/file", format="mp3")
 
 - Trigger download in the browser.
+
+- Delete file from s3 bucket
 
 - Add user feedback (snackbar) when download is in progress and done.
 
