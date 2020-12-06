@@ -40,24 +40,20 @@ def download_songs():
       'outtmpl': 'tmp/%(title)s.%(ext)s',
     }
     song_list = eval(body)
+    # Download the fiole and Upload the file to S3
+    s3 = boto3.resource('s3')
     for song in song_list:
       try:
         url = 'https://www.youtube.com/watch?v=' + song
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-          ydl.download([url])
-          # TODO
-          # Do the conversion if the file is not .mp3
-          # AudioSegment.from_file("/tracks/file").export("/output/file", format="mp3")
-          # Delete the file from the server
+          info = ydl.extract_info(url, False)
+          song_title = info['title']
+          song_format = info['formats'][0]['ext']
+          for file in glob.glob('./tmp/*.webm'):
+            s3.meta.client.upload_file(file, S3_BUCKET, '{}.{}'.format(song_title, song_format))
       except Exception as e:
         return Response("Failed to download track", status=500, mimetype='application/json')
-    
-    # Upload the file to S3
-    s3 = boto3.resource('s3')
-    for file in glob.glob('./tmp/*.webm'):
-      s3.meta.client.upload_file(file, S3_BUCKET, 'mysong.webm')
-    # Return the actual file or files to the frontend
-    #return send_file('myfile.mp3', as_attachment=True)
+
     return Response("Success", status=200, mimetype='application/json')
     
 
