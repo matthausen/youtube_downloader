@@ -3,10 +3,13 @@ from flask_cors import CORS
 import os, glob, re
 from youtube_search import YoutubeSearch
 from pytube import YouTube
+import pafy
 import moviepy.editor as mp
 import shutil
 
 application = Flask(__name__)
+
+application.config["TMP_FOLDER"] = "/Users/matteofusilli/Apps/youtube-downloader/server/"
 
 TMP_FOLDER = './tmp'
 
@@ -25,10 +28,11 @@ def download_songs():
   if request.method == "POST":
     body = request.data.decode("utf-8") 
     song_list = eval(body)
-    # Download the file and Upload the file to S3
+    # Download the file
     for song in song_list:
       url = 'https://www.youtube.com/watch?v=' + song
-      YouTube(url).streams.filter(only_audio=True).first().download(TMP_FOLDER)
+      pafy.new(url).getbest().download(TMP_FOLDER)
+      #YouTube(url).streams.filter(only_audio=True).first().download(TMP_FOLDER)
 
     # Convert file/s to mp3, zip and send to client
     for file in os.listdir(TMP_FOLDER):
@@ -41,7 +45,7 @@ def download_songs():
         os.walk(TMP_FOLDER)
         shutil.make_archive('Song', 'zip', TMP_FOLDER)
     try:
-      return send_from_directory('./', filename="Song.zip", as_attachment=True)
+      return send_from_directory(application.config["TMP_FOLDER"], filename="Song.zip", as_attachment=True)
     except FileNotFoundError:
       return Response("Error sending file to client", status=500, mimetype="application/json")
     
