@@ -9,11 +9,17 @@ import shutil
 
 application = Flask(__name__)
 
-application.config["TMP_FOLDER"] = "/Users/matteofusilli/Apps/youtube-downloader/server/"
-
 TMP_FOLDER = './tmp'
 
 CORS(application, resources={r"/*": {"origins": "*"}})
+
+def cleanup():
+  mp3s = glob.glob("/tmp/*.mp3")
+  zips = glob.glob("./*.zip")
+  for file in mp3s:
+    os.remove(file)
+  for z in zips:
+    os.remove(z)
 
 @application.route("/api/fetch-songs", methods=['POST'])
 def getSongs():
@@ -43,11 +49,17 @@ def download_songs():
         new_file.write_audiofile(mp3_path)
         os.remove(mp4_path)
         os.walk(TMP_FOLDER)
-        shutil.make_archive('Song', 'zip', TMP_FOLDER)
-    try:
-      return send_from_directory(application.config["TMP_FOLDER"], filename="Song.zip", as_attachment=True)
-    except FileNotFoundError:
-      return Response("Error sending file to client", status=500, mimetype="application/json")
+        shutil.make_archive('Music', 'zip', TMP_FOLDER)
+
+    return Response("Downoad was successful", status=200, mimetype="application/json")
+
+@application.route("/api/download-zip", methods=["GET", "POST"])
+def download():
+  try:
+    return send_from_directory("./"], filename="Music.zip", as_attachment=True, mimetype="application/zip")
+  except FileNotFoundError:
+    return Response("Error sending file", status=500, mimetype="application/json")
+  cleanup()
     
 
 if __name__ == '__main__':
