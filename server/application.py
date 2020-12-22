@@ -1,18 +1,17 @@
-from flask import Flask, render_template, request, send_from_directory, jsonify, Response, send_file
+from flask import Flask, render_template, request, send_from_directory, jsonify, Response
 from flask_cors import CORS
-import os, glob
+import os, glob, re
 from youtube_search import YoutubeSearch
-import youtube_dl
-from dotenv import load_dotenv
-import boto3
-# Might move this to aws lambda
-from pydub import AudioSegment
-
-load_dotenv()
-
-S3_BUCKET = os.getenv("S3_BUCKET")
+from pytube import YouTube
+import pafy
+import moviepy.editor as mp
+import shutil
 
 application = Flask(__name__)
+
+application.config["TMP_FOLDER"] = "/Users/matteofusilli/Apps/youtube-downloader/server/"
+
+TMP_FOLDER = './tmp'
 
 CORS(application, resources={r"/*": {"origins": "*"}})
 
@@ -23,40 +22,32 @@ def getSongs():
     results = YoutubeSearch(search_term, max_results=20).to_json()
     return results
 
-# download_songs method always expects a list of song ids, wheter single or multiple    download
+# download_songs method always expects a list of song ids, both for single and multiple download
 @application.route("/api/download-songs", methods=["POST"])
 def download_songs():
   if request.method == "POST":
     body = request.data.decode("utf-8") 
-    ydl_opts = {
-      'format': 'bestaudio/best',
-      'audioformat': 'mp3',
-      'extractaudio': True,
-      'postprocessor': [{
-        'key': 'FFmpegExtractAudio',
-        'preferredcodec': 'mp3',
-        'preferredquality': '192',
-      }],
-      'outtmpl': 'tmp/%(title)s.%(ext)s',
-    }
     song_list = eval(body)
-    # Download the fiole and Upload the file to S3
-    s3 = boto3.resource('s3')
+    # Download the file
     for song in song_list:
-      try:
-        url = 'https://www.youtube.com/watch?v=' + song
-        with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-          ydl.download([url])
-          info = ydl.extract_info(url, False)
-          song_title = info['title'].replace('/','-')
-          song_format = info['formats'][0]['ext']
-          for file in glob.glob('./tmp/*.webm'):
-            s3.meta.client.upload_file(file, S3_BUCKET, '{}.{}'.format(song_title, song_format))
-            os.remove(file)
-      except Exception as e:
-        return Response("Failed to download track", status=500, mimetype='application/json')
+      url = 'https://www.youtube.com/watch?v=' + song
+      pafy.new(url).getbest().download(TMP_FOLDER)
+      #YouTube(url).streams.filter(only_audio=True).first().download(TMP_FOLDER)
 
-    return Response("Success", status=200, mimetype='application/json')
+    # Convert file/s to mp3, zip and send to client
+    for file in os.listdir(TMP_FOLDER):
+      if re.search('mp4', file):
+        mp4_path = os.path.join(TMP_FOLDER,file)
+        mp3_path = os.path.join(TMP_FOLDER,os.path.splitext(file)[0]+'.mp3')
+        new_file = mp.AudioFileClip(mp4_path)
+        new_file.write_audiofile(mp3_path)
+        os.remove(mp4_path)
+        os.walk(TMP_FOLDER)
+        shutil.make_archive('Song', 'zip', TMP_FOLDER)
+    try:
+      return send_from_directory(application.config["TMP_FOLDER"], filename="Song.zip", as_attachment=True)
+    except FileNotFoundError:
+      return Response("Error sending file to client", status=500, mimetype="application/json")
     
 
 if __name__ == '__main__':
