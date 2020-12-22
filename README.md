@@ -12,8 +12,6 @@ https://adamraudonis.medium.com/how-to-deploy-a-website-on-aws-with-docker-flask
 
 ## TODO:
 
-- Delete file after download is complete
-
 - Add user feedback (snackbar) when download is in progress and done.
 
 - Plug in in Google Analytics

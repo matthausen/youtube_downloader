@@ -14,12 +14,16 @@ TMP_FOLDER = './tmp'
 CORS(application, resources={r"/*": {"origins": "*"}})
 
 def cleanup():
-  mp3s = glob.glob("/tmp/*.mp3")
   zips = glob.glob("./*.zip")
-  for file in mp3s:
-    os.remove(file)
-  for z in zips:
-    os.remove(z)
+  mp3s = glob.glob("./tmp/*.mp3")
+  if len(mp3s) > 0:
+    for file in mp3s:
+      print("Deleting: ", file)
+      os.remove(file)
+  if len(zips) > 0:
+    for z in zips:
+      print("Deleting: ", z)
+      os.remove(z)
 
 @application.route("/api/fetch-songs", methods=['POST'])
 def getSongs():
@@ -28,17 +32,19 @@ def getSongs():
     results = YoutubeSearch(search_term, max_results=20).to_json()
     return results
 
-# download_songs method always expects a list of song ids, both for single and multiple download
 @application.route("/api/download-songs", methods=["POST"])
 def download_songs():
   if request.method == "POST":
+    # Clean any previous files
+    cleanup()
+
     body = request.data.decode("utf-8") 
     song_list = eval(body)
+    
     # Download the file
     for song in song_list:
       url = 'https://www.youtube.com/watch?v=' + song
       pafy.new(url).getbest().download(TMP_FOLDER)
-      #YouTube(url).streams.filter(only_audio=True).first().download(TMP_FOLDER)
 
     # Convert file/s to mp3, zip and send to client
     for file in os.listdir(TMP_FOLDER):
@@ -56,11 +62,9 @@ def download_songs():
 @application.route("/api/download-zip", methods=["GET", "POST"])
 def download():
   try:
-    return send_from_directory("./"], filename="Music.zip", as_attachment=True, mimetype="application/zip")
+    return send_from_directory("./", filename="Music.zip", as_attachment=True, mimetype="application/zip")
   except FileNotFoundError:
-    return Response("Error sending file", status=500, mimetype="application/json")
-  cleanup()
-    
+    return Response("Error sending file", status=500, mimetype="application/json")    
 
 if __name__ == '__main__':
   application.run(use_reloader=True, port=5000, threaded=True)

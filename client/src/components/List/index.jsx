@@ -71,7 +71,7 @@ export default function TracksList({ tracks }) {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       }
-    }).then(res => console.log(res.data));
+    }).then(res => console.log(`Response from server: ${res}`));
   }
 
   const handleDeleteFromList = song => {
@@ -86,7 +86,7 @@ export default function TracksList({ tracks }) {
   return (
     <Container maxWidth="lg">
       <Box p={6}>
-        <a href="127.0.0.1:5000/api/download-zip">Download as .zip</a>
+        <a href="http://127.0.0.1:5000/api/download-zip">Download as .zip</a>
         {checked && checked.length > 0 ?
           (
             <Box>
