@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -49,7 +49,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function TracksList({ tracks }) {
   const classes = useStyles();
-  const [checked, setChecked] = React.useState([]);
+  const [checked, setChecked] = useState([]);
+  const [ready, setReady] = useState(false);
 
   const handleToggle = value => () => {
     const currentIndex = checked.indexOf(value);
@@ -71,7 +72,11 @@ export default function TracksList({ tracks }) {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       }
-    }).then(res => console.log(`Response from server: ${res}`));
+    }).then(res => {
+      if (res.status === 200) {
+        setReady(true);
+      }
+    });
   }
 
   const handleDeleteFromList = song => {
@@ -86,7 +91,7 @@ export default function TracksList({ tracks }) {
   return (
     <Container maxWidth="lg">
       <Box p={6}>
-        <a href="http://127.0.0.1:5000/api/download-zip">Download as .zip</a>
+        {ready && <a href="http://127.0.0.1:5000/api/download-zip">Download as .zip</a>}
         {checked && checked.length > 0 ?
           (
             <Box>

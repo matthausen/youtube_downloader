@@ -16,6 +16,8 @@ CORS(application, resources={r"/*": {"origins": "*"}})
 def cleanup():
   zips = glob.glob("./*.zip")
   mp3s = glob.glob("./tmp/*.mp3")
+  print(mp3s);
+  print(zips)
   if len(mp3s) > 0:
     for file in mp3s:
       print("Deleting: ", file)
@@ -51,6 +53,7 @@ def download_songs():
       if re.search('mp4', file):
         mp4_path = os.path.join(TMP_FOLDER,file)
         mp3_path = os.path.join(TMP_FOLDER,os.path.splitext(file)[0]+'.mp3')
+        print(mp3_path)
         new_file = mp.AudioFileClip(mp4_path)
         new_file.write_audiofile(mp3_path)
         os.remove(mp4_path)
