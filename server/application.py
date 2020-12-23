@@ -70,4 +70,4 @@ def download():
     return Response("Error sending file", status=500, mimetype="application/json")    
 
 if __name__ == '__main__':
-  application.run(use_reloader=True, port=5000, threaded=True)
+  application.run(use_reloader=True, port=8080, threaded=True)

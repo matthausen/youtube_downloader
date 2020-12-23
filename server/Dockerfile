@@ -10,4 +10,4 @@ EXPOSE 8080
 
 COPY . .
 
-CMD ["python", "application.py"]
+CMD ["gunicorn", "wsgi:application", "-w 2", "-b 0.0.0.0:8080", "-t 30"]
