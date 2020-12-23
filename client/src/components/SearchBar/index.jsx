@@ -44,7 +44,7 @@ export default function SearchBar() {
 
   const handleSubmit = e => {
     e.preventDefault();
-    const API_URL = 'http://127.0.0.1:5000';
+    const API_URL = 'http://0.0.0.0:80';
     axios.post(`${API_URL}/api/fetch-songs`, track, {
       headers: {
         Accept: 'application/json',

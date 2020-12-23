@@ -66,7 +66,7 @@ export default function TracksList({ tracks }) {
   };
 
   const handleDownload = songId => {
-    const API_URL = 'http://127.0.0.1:5000';
+    const API_URL = 'http://0.0.0.0:80';
     axios.post(`${API_URL}/api/download-songs`, songId, {
       headers: {
         Accept: 'application/json',
@@ -91,7 +91,7 @@ export default function TracksList({ tracks }) {
   return (
     <Container maxWidth="lg">
       <Box p={6}>
-        {ready && <a href="http://127.0.0.1:5000/api/download-zip">Download as .zip</a>}
+        {ready && <a href="http://0.0.0.0:80/api/download-zip">Download as .zip</a>}
         {checked && checked.length > 0 ?
           (
             <Box>
