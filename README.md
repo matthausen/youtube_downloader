@@ -1,31 +1,21 @@
 Domain: youtubemusicdownload.app
 
 ## Deployment
+This app is deployed as a dyno on Heroku
+Follow tutorial on: https://medium.com/swlh/how-to-deploy-a-react-python-flask-project-on-heroku-edb99309311
 
-### Frontend
-Navigate to the `client` folder and build:
-- `npm run build`
+Create aan app:
+- `heroku create APP_NAME`
 
-Then upload to S3:
-- `aws s3 sync build/ s3://whitechapel-229107932276-react-app --acl public-read`
+Add remote branch:
+- `heroku git:remote -a APP_NAME`
 
-### Backend
-Build and push the image:
-- `docker build -t matthausen/whitechapel:latest`
-- `docker push matthausen/whitechapel`
+Push changes to the branch:
+- `git push heroku BRANCH_NAME:master`
 
-The image is uploaded to the docker hub registry: "registry.hub.docker.com/matthausen/whitechapel:latest"
-- `pip install awsebcli`
-- `eb init`
-- `eb deploy`
+Bash into application to evrify changes:
+- `heroku run bash -a APP_NAME`
 
-Refer to this guide for deployment: 
-https://adamraudonis.medium.com/how-to-deploy-a-website-on-aws-with-docker-flask-react-from-scratch-d0845ebd9da4
-
-- ElasticBeanstalk + Docker container
-- S3 for the frontend
-- Route55 for the domain
-- CDN
 
 ## TODO:
 

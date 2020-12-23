@@ -9,13 +9,13 @@ import shutil
 
 app = Flask(__name__, static_folder="./client/build/static", template_folder="./client/build")
 
-TMP_FOLDER = './tmp'
+TMP_FOLDER = '/'
 
 CORS(app, resources={r"/*": {"origins": "*"}})
 
 def cleanup():
   zips = glob.glob("./*.zip")
-  mp3s = glob.glob("./tmp/*.mp3")
+  mp3s = glob.glob("./*.mp3")
   print(mp3s);
   print(zips)
   if len(mp3s) > 0:
