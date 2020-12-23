@@ -7,11 +7,11 @@ import pafy
 import moviepy.editor as mp
 import shutil
 
-application = Flask(__name__)
+app = Flask(__name__)
 
 TMP_FOLDER = './tmp'
 
-CORS(application, resources={r"/*": {"origins": "*"}})
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 def cleanup():
   zips = glob.glob("./*.zip")
@@ -27,14 +27,14 @@ def cleanup():
       print("Deleting: ", z)
       os.remove(z)
 
-@application.route("/api/fetch-songs", methods=['POST'])
+@app.route("/api/fetch-songs", methods=['POST'])
 def getSongs():
   if request.method == 'POST':
     search_term = request.data
     results = YoutubeSearch(search_term, max_results=20).to_json()
     return results
 
-@application.route("/api/download-songs", methods=["POST"])
+@app.route("/api/download-songs", methods=["POST"])
 def download_songs():
   if request.method == "POST":
     # Clean any previous files
@@ -62,7 +62,7 @@ def download_songs():
 
     return Response("Downoad was successful", status=200, mimetype="application/json")
 
-@application.route("/api/download-zip", methods=["GET", "POST"])
+@app.route("/api/download-zip", methods=["GET", "POST"])
 def download():
   try:
     return send_from_directory("./", filename="Music.zip", as_attachment=True, mimetype="application/zip")
@@ -70,4 +70,4 @@ def download():
     return Response("Error sending file", status=500, mimetype="application/json")    
 
 if __name__ == '__main__':
-  application.run(use_reloader=True, port=8080, threaded=True)
+  app.run(use_reloader=True, port=8080, threaded=True)
