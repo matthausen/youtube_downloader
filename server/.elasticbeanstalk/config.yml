@@ -1,14 +1,14 @@
 branch-defaults:
   default:
-    environment: WhitechapelPythonService-env
+    environment: WhitechapePythonService-env
 environment-defaults:
-  WhitechapelPythonService-env:
+  WhitechapePythonService-env:
     branch: null
     repository: null
 global:
-  application_name: whitechapel-python-service
+  application_name: whitechape-python-service
   default_ec2_keyname: null
-  default_platform: Python 3.7 running on 64bit Amazon Linux 2
+  default_platform: Docker running on 64bit Amazon Linux 2
   default_region: eu-west-2
   include_git_submodules: true
   instance_profile: null
