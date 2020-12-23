@@ -7,7 +7,7 @@ import pafy
 import moviepy.editor as mp
 import shutil
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="./client/build/static", template_folder="./client/build")
 
 TMP_FOLDER = './tmp'
 
@@ -26,6 +26,10 @@ def cleanup():
     for z in zips:
       print("Deleting: ", z)
       os.remove(z)
+
+@app.route("/",methods=['GET', 'POST'])
+def index():
+  return render_template('index.html')
 
 @app.route("/api/fetch-songs", methods=['POST'])
 def getSongs():
@@ -70,4 +74,4 @@ def download():
     return Response("Error sending file", status=500, mimetype="application/json")    
 
 if __name__ == '__main__':
-  app.run(use_reloader=True, port=8080, threaded=True)
+  app.run(host='0.0.0.0', debug=False, port=os.environ.get('PORT', 80))
