@@ -26,6 +26,7 @@ const useStyles = makeStyles((theme) => ({
   },
   iconButton: {
     padding: 10,
+    color: '#ff5252'
   },
   divider: {
     height: 28,
@@ -73,7 +74,7 @@ export default function SearchBar() {
               <SearchIcon />
             </IconButton>
             <Divider className={classes.divider} orientation="vertical" />
-            <IconButton color="primary" className={classes.iconButton} aria-label="directions">
+            <IconButton className={classes.iconButton} aria-label="directions">
               <MusicNoteIcon />
             </IconButton>
           </Paper>

@@ -29,13 +29,22 @@ const useStyles = makeStyles((theme) => ({
       margin: theme.spacing(0.5),
     },
   },
+  whitechapelColor: {
+    color: '#ff5252'
+  },
+  chip: {
+    backgroundColor: '#ff5252',
+    color: '#ffffff'
+  },
   clearAllIcon: {
     margin: 10,
-    fontSize: "2rem"
+    fontSize: "2rem",
+    color: '#ff5252'
   },
   downlaodIcon: {
     margin: 10,
-    fontSize: '2em'
+    fontSize: '2em',
+    color: '#ff5252'
   }
 }));
 
@@ -90,7 +99,7 @@ export default function TracksList({ tracks }) {
       <Box p={6}>
         {loading && (
           <>
-            <CircularProgress color="secondary" />
+            <CircularProgress className={classes.whitechapelColor} />
             <Typography variant="body1" component="p">Converting to mp3...please wait</Typography>
           </>
         )}
@@ -104,7 +113,7 @@ export default function TracksList({ tracks }) {
                     avatar={<Avatar alt="Song" src={song.thumbnails[0]} />}
                     label={song.title}
                     onDelete={() => handleDeleteFromList(song)}
-                    color="secondary"
+                    className={classes.chip}
                   />
                 )}
               </div>
