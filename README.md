@@ -22,13 +22,9 @@ Check latest logs:
 
 ## TODO:
 
-- Add user feedback (snackbar) when download is in progress and done.
-
 - Deployment with custom domain name
 
 - Plug in in Google Analytics
-
-- Customise theme
 
 - CCI
 
