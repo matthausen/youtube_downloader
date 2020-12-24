@@ -88,7 +88,12 @@ export default function TracksList({ tracks }) {
   return (
     <Container maxWidth="lg">
       <Box p={6}>
-        {loading && <CircularProgress color="secondary" />}
+        {loading && (
+          <>
+            <CircularProgress color="secondary" />
+            <Typography variant="body1" component="p">Converting to mp3...please wait</Typography>
+          </>
+        )}
         {ready && <a href={`${API_URL}/api/download-zip`}>Download as .zip</a>}
         {checked && checked.length > 0 ?
           (
