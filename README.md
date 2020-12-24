@@ -13,15 +13,18 @@ Add remote branch:
 Push changes to the branch:
 - `git push heroku BRANCH_NAME:master`
 
-Bash into application to evrify changes:
+Bash into application to verify changes:
 - `heroku run bash -a APP_NAME`
+
+Check latest logs:
+- `heroku logs --tail`
 
 
 ## TODO:
 
 - Add user feedback (snackbar) when download is in progress and done.
 
-- Deploy
+- Deployment with custom domain name
 
 - Plug in in Google Analytics
 

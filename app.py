@@ -9,13 +9,13 @@ import shutil
 
 app = Flask(__name__, static_folder="./client/build/static", template_folder="./client/build")
 
-TMP_FOLDER = './'
+TMP_FOLDER = './tmp'
 
 CORS(app, resources={r"/*": {"origins": "*"}})
 
 def cleanup():
-  zips = glob.glob("./*.zip")
-  mp3s = glob.glob("./*.mp3")
+  zips = glob.glob("./tmp/*.zip")
+  mp3s = glob.glob("./tmp/*.mp3")
   print(mp3s);
   print(zips)
   if len(mp3s) > 0:
@@ -41,6 +41,10 @@ def getSongs():
 @app.route("/api/download-songs", methods=["POST"])
 def download_songs():
   if request.method == "POST":
+    try:
+      os.mkdir(TMP_FOLDER)
+    except Exception:
+      print("Directory already exists: ", Exception)
     # Clean any previous files
     cleanup()
 
@@ -57,7 +61,6 @@ def download_songs():
       if re.search('mp4', file):
         mp4_path = os.path.join(TMP_FOLDER,file)
         mp3_path = os.path.join(TMP_FOLDER,os.path.splitext(file)[0]+'.mp3')
-        print(mp3_path)
         new_file = mp.AudioFileClip(mp4_path)
         new_file.write_audiofile(mp3_path)
         os.remove(mp4_path)

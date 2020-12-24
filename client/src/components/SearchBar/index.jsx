@@ -55,29 +55,31 @@ export default function SearchBar() {
   }
 
   return (
-    <Container>
-      <Box p={6}>
-        <Paper component="form" className={classes.root} onSubmit={handleSubmit}>
-          <IconButton className={classes.iconButton} aria-label="menu">
-            <AlbumIcon />
-          </IconButton>
-          <InputBase
-            autoFocus
-            className={classes.input}
-            onChange={handleChange}
-            placeholder="Search for a song or an artist"
-            inputProps={{ 'aria-label': 'search song or artist' }}
-          />
-          <IconButton type="submit" className={classes.iconButton} aria-label="search">
-            <SearchIcon />
-          </IconButton>
-          <Divider className={classes.divider} orientation="vertical" />
-          <IconButton color="primary" className={classes.iconButton} aria-label="directions">
-            <MusicNoteIcon />
-          </IconButton>
-        </Paper>
-      </Box>
-      {results ? <TracksList tracks={results} /> : null}
-    </Container>
+    <>
+      <Container>
+        <Box p={6}>
+          <Paper component="form" className={classes.root} onSubmit={handleSubmit}>
+            <IconButton className={classes.iconButton} aria-label="menu">
+              <AlbumIcon />
+            </IconButton>
+            <InputBase
+              autoFocus
+              className={classes.input}
+              onChange={handleChange}
+              placeholder="Search for a song or an artist"
+              inputProps={{ 'aria-label': 'search song or artist' }}
+            />
+            <IconButton type="submit" className={classes.iconButton} aria-label="search">
+              <SearchIcon />
+            </IconButton>
+            <Divider className={classes.divider} orientation="vertical" />
+            <IconButton color="primary" className={classes.iconButton} aria-label="directions">
+              <MusicNoteIcon />
+            </IconButton>
+          </Paper>
+        </Box>
+      </Container>
+      {results && <TracksList tracks={results} />}
+    </>
   );
 }

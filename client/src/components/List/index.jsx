@@ -1,21 +1,13 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import Box from '@material-ui/core/Box';
-import Paper from '@material-ui/core/Paper';
-import Chip from '@material-ui/core/Chip';
-import Avatar from '@material-ui/core/Avatar';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import ListItemText from '@material-ui/core/ListItemText';
-import Checkbox from '@material-ui/core/Checkbox';
-import IconButton from '@material-ui/core/IconButton';
-import GetAppIcon from '@material-ui/icons/GetApp';
+import {
+  Container, Box, Chip, Paper, Avatar, List, ListItem, ListItemIcon, ListItemSecondaryAction, ListItemText, Typography,
+  Checkbox, IconButton, Tooltip, CircularProgress
+} from '@material-ui/core';
 import ClearAllIcon from '@material-ui/icons/ClearAll';
-import Tooltip from '@material-ui/core/Tooltip';
+import GetAppIcon from '@material-ui/icons/GetApp';
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -51,6 +43,9 @@ export default function TracksList({ tracks }) {
   const classes = useStyles();
   const [checked, setChecked] = useState([]);
   const [ready, setReady] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const API_URL = 'http://0.0.0.0:80';
 
   const handleToggle = value => () => {
     const currentIndex = checked.indexOf(value);
@@ -66,7 +61,7 @@ export default function TracksList({ tracks }) {
   };
 
   const handleDownload = songId => {
-    const API_URL = 'http://0.0.0.0:80';
+    setLoading(true);
     axios.post(`${API_URL}/api/download-songs`, songId, {
       headers: {
         Accept: 'application/json',
@@ -74,6 +69,8 @@ export default function TracksList({ tracks }) {
       }
     }).then(res => {
       if (res.status === 200) {
+        console.log(`The response: ${res}`);
+        setLoading(false);
         setReady(true);
       }
     });
@@ -91,7 +88,8 @@ export default function TracksList({ tracks }) {
   return (
     <Container maxWidth="lg">
       <Box p={6}>
-        {ready && <a href="http://0.0.0.0:80/api/download-zip">Download as .zip</a>}
+        {loading && <CircularProgress color="secondary" />}
+        {ready && <a href={`${API_URL}/api/download-zip`}>Download as .zip</a>}
         {checked && checked.length > 0 ?
           (
             <Box>
@@ -116,37 +114,39 @@ export default function TracksList({ tracks }) {
             </Box>
           ) : null
         }
-        <Paper>
-          <List className={classes.root}>
-            {tracks.videos.map(value => {
+        {tracks.videos.length > 0 ? (
+          <Paper>
+            <List className={classes.root}>
+              {tracks.videos.map(value => {
 
-              const { id, title } = value; //more props: duration, channel, views
-              const labelId = `checkbox-list-label-${title}`;
+                const { id, title } = value; //more props: duration, channel, views
+                const labelId = `checkbox-list-label-${title}`;
 
-              return (
-                <ListItem key={id} role={undefined} dense button onClick={handleToggle(value)}>
-                  <ListItemIcon>
-                    <Checkbox
-                      edge="start"
-                      checked={checked.indexOf(value) !== -1}
-                      tabIndex={-1}
-                      disableRipple
-                      inputProps={{ 'aria-labelledby': labelId }}
-                    />
-                  </ListItemIcon>
-                  <ListItemText id={labelId} primary={`${title}`} />
-                  <ListItemSecondaryAction>
-                  <Tooltip title="Download song" aria-label="download-song">
-                    <IconButton edge="end" aria-label="comments">
-                      <GetAppIcon onClick={() => handleDownload([id])} />
-                    </IconButton>
-                  </Tooltip>
-                  </ListItemSecondaryAction>
-                </ListItem>
-              );
-            })}
-          </List>
-        </Paper>
+                return (
+                  <ListItem key={id} role={undefined} dense button onClick={handleToggle(value)}>
+                    <ListItemIcon>
+                      <Checkbox
+                        edge="start"
+                        checked={checked.indexOf(value) !== -1}
+                        tabIndex={-1}
+                        disableRipple
+                        inputProps={{ 'aria-labelledby': labelId }}
+                      />
+                    </ListItemIcon>
+                    <ListItemText id={labelId} primary={`${title}`} />
+                    <ListItemSecondaryAction>
+                      <Tooltip title="Download song" aria-label="download-song">
+                        <IconButton edge="end" aria-label="comments">
+                          <GetAppIcon onClick={() => handleDownload([id])} />
+                        </IconButton>
+                      </Tooltip>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                );
+              })}
+            </List>
+          </Paper>
+        ) : <Typography variant="body1" component="p">No results were found 😞. Please try again</Typography>}
       </Box>
     </Container>
   );
