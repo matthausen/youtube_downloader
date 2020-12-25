@@ -2,7 +2,6 @@ Domain: youtubemusicdownload.app
 
 ## Deployment
 This app is deployed as a dyno on Heroku
-Follow tutorial on: https://medium.com/swlh/how-to-deploy-a-react-python-flask-project-on-heroku-edb99309311
 
 Create aan app:
 - `heroku create APP_NAME`
