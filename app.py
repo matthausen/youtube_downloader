@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, send_from_directory, jsonify, Response
 from flask_cors import CORS
-import os, glob, re
+import os, glob, re, time
 from youtube_search import YoutubeSearch
 from pytube import YouTube
 import pafy
@@ -14,10 +14,8 @@ TMP_FOLDER = './tmp'
 CORS(app, resources={r"/*": {"origins": "*"}})
 
 def cleanup():
-  zips = glob.glob("./tmp/*.zip")
+  zips = glob.glob("./*.zip")
   mp3s = glob.glob("./tmp/*.mp3")
-  print(mp3s);
-  print(zips)
   if len(mp3s) > 0:
     for file in mp3s:
       print("Deleting: ", file)
@@ -65,14 +63,20 @@ def download_songs():
         new_file.write_audiofile(mp3_path)
         os.remove(mp4_path)
         os.walk(TMP_FOLDER)
-        shutil.make_archive('Music', 'zip', TMP_FOLDER)
+        shutil.make_archive('Music' + str(time.time()), 'zip', TMP_FOLDER)
 
     return Response("Downoad was successful", status=200, mimetype="application/json")
 
 @app.route("/api/download-zip", methods=["GET", "POST"])
 def download():
+  zips = glob.glob("./*.zip")
+  music_file = ''
+  if len(zips) > 0:
+    for z in zips:
+      music_file = z
+      print("send file: ", music_file)
   try:
-    return send_from_directory("./", filename="Music.zip", as_attachment=True, mimetype="application/zip")
+    return send_from_directory("./", filename=music_file, as_attachment=True, mimetype="application/zip", cache_timeout=-1)
   except FileNotFoundError:
     return Response("Error sending file", status=500, mimetype="application/json")    
 

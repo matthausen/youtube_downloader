@@ -24,6 +24,10 @@ Check latest logs:
 
 - Deployment with custom domain name
 
+- Avatar for each song name
+
+- Add duration on song list
+
 - Plug in in Google Analytics
 
 - CCI
