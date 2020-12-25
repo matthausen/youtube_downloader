@@ -66,7 +66,7 @@ export default function TracksList({ tracks }) {
   const [ready, setReady] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const API_URL = 'http://0.0.0.0:80';
+  const API_URL = process.env.API_URL;
 
   const handleToggle = value => () => {
     const currentIndex = checked.indexOf(value);
