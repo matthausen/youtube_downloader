@@ -26,6 +26,7 @@ const useStyles = makeStyles((theme) => ({
   },
   iconButton: {
     padding: 10,
+    color: '#ff5252'
   },
   divider: {
     height: 28,
@@ -44,8 +45,7 @@ export default function SearchBar() {
 
   const handleSubmit = e => {
     e.preventDefault();
-    const API_URL = 'http://127.0.0.1:5000';
-    axios.post(`${API_URL}/api/fetch-songs`, track, {
+    axios.post(`/api/fetch-songs`, track, {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
@@ -55,29 +55,31 @@ export default function SearchBar() {
   }
 
   return (
-    <Container>
-      <Box p={6}>
-        <Paper component="form" className={classes.root} onSubmit={handleSubmit}>
-          <IconButton className={classes.iconButton} aria-label="menu">
-            <AlbumIcon />
-          </IconButton>
-          <InputBase
-            autoFocus
-            className={classes.input}
-            onChange={handleChange}
-            placeholder="Search for a song or an artist"
-            inputProps={{ 'aria-label': 'search song or artist' }}
-          />
-          <IconButton type="submit" className={classes.iconButton} aria-label="search">
-            <SearchIcon />
-          </IconButton>
-          <Divider className={classes.divider} orientation="vertical" />
-          <IconButton color="primary" className={classes.iconButton} aria-label="directions">
-            <MusicNoteIcon />
-          </IconButton>
-        </Paper>
-      </Box>
-      {results ? <TracksList tracks={results} /> : null}
-    </Container>
+    <>
+      <Container>
+        <Box p={6}>
+          <Paper component="form" className={classes.root} onSubmit={handleSubmit}>
+            <IconButton className={classes.iconButton} aria-label="menu">
+              <AlbumIcon />
+            </IconButton>
+            <InputBase
+              autoFocus
+              className={classes.input}
+              onChange={handleChange}
+              placeholder="Search for a song or an artist"
+              inputProps={{ 'aria-label': 'search song or artist' }}
+            />
+            <IconButton type="submit" className={classes.iconButton} aria-label="search">
+              <SearchIcon />
+            </IconButton>
+            <Divider className={classes.divider} orientation="vertical" />
+            <IconButton className={classes.iconButton} aria-label="directions">
+              <MusicNoteIcon />
+            </IconButton>
+          </Paper>
+        </Box>
+      </Container>
+      {results && <TracksList tracks={results} />}
+    </>
   );
 }

@@ -1,30 +1,30 @@
 Domain: youtubemusicdownload.app
 
 ## Deployment
+This app is deployed as a dyno on Heroku
 
-Refer to this guide for deployment: 
-https://adamraudonis.medium.com/how-to-deploy-a-website-on-aws-with-docker-flask-react-from-scratch-d0845ebd9da4
+Create aan app:
+- `heroku create APP_NAME`
 
-ECS + docker for the service
-S3 for the frontend
-Route55 for the domain
-CDN
+Add remote branch:
+- `heroku git:remote -a APP_NAME`
+
+Push changes to the branch:
+- `git push heroku BRANCH_NAME:master`
+
+Bash into application to verify changes:
+- `heroku run bash -a APP_NAME`
+
+Check latest logs:
+- `heroku logs --tail`
+
 
 ## TODO:
 
-
-- Save file to S3 bucket
-
-- Conversion from m4a or webm to .mp3 (aws lambda trigger)
-
-- Trigger download in the browser.
-
-- Add user feedback (snackbar) when download is in progress and done.
+- Add PayPal donation button
 
 - Plug in in Google Analytics
 
-- Deployment: AWS ECS (contasiners) vs ElasticBeanStalk
+- CCI
 
-- browser logo
-
-- Customise theme
+- Browser logo

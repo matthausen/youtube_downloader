@@ -1,4 +1,6 @@
 venv
 node_modules
-build
+.env
 *.zip
+*.mp3
+*.mp4
