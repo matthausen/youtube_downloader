@@ -66,7 +66,6 @@ export default function TracksList({ tracks }) {
   const [ready, setReady] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const API_URL = process.env.API_URL;
 
   const handleToggle = value => () => {
     const currentIndex = checked.indexOf(value);
@@ -83,7 +82,7 @@ export default function TracksList({ tracks }) {
 
   const handleDownload = songId => {
     setLoading(true);
-    axios.post(`${API_URL}/api/download-songs`, songId, {
+    axios.post(`/api/download-songs`, songId, {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
@@ -115,7 +114,7 @@ export default function TracksList({ tracks }) {
             <Typography variant="body1" component="p">Converting to mp3...please wait</Typography>
           </>
         )}
-        {ready && <a href={`${API_URL}/api/download-zip`}>Download as .zip</a>}
+        {ready && <a href={`/api/download-zip`}>Download as .zip</a>}
         {checked && checked.length > 0 ?
           (
             <Box>

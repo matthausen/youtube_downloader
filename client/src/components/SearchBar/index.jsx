@@ -45,8 +45,7 @@ export default function SearchBar() {
 
   const handleSubmit = e => {
     e.preventDefault();
-    const API_URL = process.env.API_URL;
-    axios.post(`${API_URL}/api/fetch-songs`, track, {
+    axios.post(`/api/fetch-songs`, track, {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
