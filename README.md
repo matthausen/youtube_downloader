@@ -22,11 +22,7 @@ Check latest logs:
 
 ## TODO:
 
-- Deployment with custom domain name
-
-- Avatar for each song name
-
-- Add duration on song list
+- Add PayPal donation button
 
 - Plug in in Google Analytics
 
