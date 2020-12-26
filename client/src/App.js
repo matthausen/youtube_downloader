@@ -6,7 +6,7 @@ import './App.css';
 function App() {
   useEffect(() => {
     ReactGA.initialize('G-LKSEYJDRQX');
-    ReactGA.pageview(window.location.pathname);
+    ReactGA.pageview(window.location.pathname + window.location.search);
   })
   return (
     <div className="App">
