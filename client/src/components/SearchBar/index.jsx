@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
     padding: '2px 4px',
     display: 'flex',
     alignItems: 'center',
-    width: 400,
+    maxWidth: 400,
     margin: '0 auto'
   },
   input: {
@@ -57,7 +57,7 @@ export default function SearchBar() {
   return (
     <>
       <Container>
-        <Box p={6}>
+        <Box p={2}>
           <Paper component="form" className={classes.root} onSubmit={handleSubmit}>
             <IconButton className={classes.iconButton} aria-label="menu">
               <AlbumIcon />

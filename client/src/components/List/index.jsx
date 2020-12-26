@@ -8,8 +8,6 @@ import {
 import ClearAllIcon from '@material-ui/icons/ClearAll';
 import SyncIcon from '@material-ui/icons/Sync';
 
-
-
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
@@ -50,6 +48,9 @@ const useStyles = makeStyles((theme) => ({
     margin: 10,
     fontSize: '2em',
     color: '#ff5252'
+  },
+  listItem: {
+    minWidth: 0
   },
   songCard: {
     margin: 10,
@@ -107,74 +108,72 @@ export default function TracksList({ tracks }) {
 
   return (
     <Container maxWidth="lg">
-      <Box p={6}>
-        {loading && (
-          <>
-            <CircularProgress className={classes.whitechapelColor} />
-            <Typography variant="body1" component="p">Converting to mp3...please wait</Typography>
-          </>
-        )}
-        {ready && <a href={`/api/download-zip`}>Download as .zip</a>}
-        {checked && checked.length > 0 ?
-          (
-            <Box>
-              <div className={classes.chips}>
-                {checked.map(song =>
-                  <Chip
-                    avatar={<Avatar alt="Song" src={song.thumbnails[0]} />}
-                    label={song.title}
-                    onDelete={() => handleDeleteFromList(song)}
-                    className={classes.chip}
-                  />
-                )}
-              </div>
-              <div className={classes.actions}>
-                <Tooltip title="Download All" aria-label="download-all">
-                  <SyncIcon className={classes.downlaodIcon} color="secondary" onClick={() => handleDownload(checked.map(song => song.id))} />
-                </Tooltip>
-                <Tooltip title="Clear All" aria-label="clear-all">
-                  <ClearAllIcon className={classes.clearAllIcon} color="secondary" onClick={handleClearAll} />
-                </Tooltip>
-              </div>
-            </Box>
-          ) : null
-        }
-        {tracks.videos.length > 0 ? (
-            <List className={classes.root}>
-              {tracks.videos.map(value => {
+      {loading && (
+        <>
+          <CircularProgress className={classes.whitechapelColor} />
+          <Typography variant="body1" component="p">Converting to mp3...please wait</Typography>
+        </>
+      )}
+      {ready && <a href={`/api/download-zip`}>Download as .zip</a>}
+      {checked && checked.length > 0 ?
+        (
+          <Box>
+            <div className={classes.chips}>
+              {checked.map(song =>
+                <Chip
+                  avatar={<Avatar alt="Song" src={song.thumbnails[0]} />}
+                  label={song.title}
+                  onDelete={() => handleDeleteFromList(song)}
+                  className={classes.chip}
+                />
+              )}
+            </div>
+            <div className={classes.actions}>
+              <Tooltip title="Download All" aria-label="download-all">
+                <SyncIcon className={classes.downlaodIcon} color="secondary" onClick={() => handleDownload(checked.map(song => song.id))} />
+              </Tooltip>
+              <Tooltip title="Clear All" aria-label="clear-all">
+                <ClearAllIcon className={classes.clearAllIcon} color="secondary" onClick={handleClearAll} />
+              </Tooltip>
+            </div>
+          </Box>
+        ) : null
+      }
+      {tracks.videos.length > 0 ? (
+        <List className={classes.root}>
+          {tracks.videos.map(value => {
 
-                const { id, title, thumbnails, duration } = value;
-                const labelId = `checkbox-list-label-${title}`;
+            const { id, title, thumbnails, duration } = value;
+            const labelId = `checkbox-list-label-${title}`;
 
-                return (
-                  <Paper className={classes.songCard} elevation={3}>
-                    <ListItem key={id} role={undefined} dense button onClick={handleToggle(value)}>
-                      <ListItemIcon>
-                        <Checkbox
-                          edge="start"
-                          checked={checked.indexOf(value) !== -1}
-                          tabIndex={-1}
-                          disableRipple
-                          inputProps={{ 'aria-labelledby': labelId }}
-                        />
-                      </ListItemIcon>
-                      <Avatar className={classes.thumbnail} alt="thumbnail" src={thumbnails[0]} />
-                      <ListItemText id={labelId} primary={`${title}`} />
-                      <ListItemText className={classes.duration} id={labelId} primary={`min ${duration}`} />
-                      <ListItemSecondaryAction>
-                        <Tooltip title="Convert song to mp3" aria-label="convert-song">
-                          <IconButton edge="end" aria-label="comments">
-                            <SyncIcon onClick={() => handleDownload([id])} />
-                          </IconButton>
-                        </Tooltip>
-                      </ListItemSecondaryAction>
-                    </ListItem>
-                  </Paper>
-                );
-              })}
-            </List>
-        ) : <Typography variant="body1" component="p">No results were found 😞. Please try again</Typography>}
-      </Box>
+            return (
+              <Paper className={classes.songCard} elevation={3}>
+                <ListItem key={id} role={undefined} dense button onClick={handleToggle(value)}>
+                  <ListItemIcon className={classes.listItem}>
+                    <Checkbox
+                      edge="start"
+                      checked={checked.indexOf(value) !== -1}
+                      tabIndex={-1}
+                      disableRipple
+                      inputProps={{ 'aria-labelledby': labelId }}
+                    />
+                  </ListItemIcon>
+                  <Avatar className={classes.thumbnail} alt="thumbnail" src={thumbnails[0]} />
+                  <ListItemText id={labelId} primary={`${title}`} />
+                  <ListItemText className={classes.duration} id={labelId} primary={`min ${duration}`} />
+                  <ListItemSecondaryAction>
+                    <Tooltip title="Convert song to mp3" aria-label="convert-song">
+                      <IconButton edge="end" aria-label="comments">
+                        <SyncIcon onClick={() => handleDownload([id])} />
+                      </IconButton>
+                    </Tooltip>
+                  </ListItemSecondaryAction>
+                </ListItem>
+              </Paper>
+            );
+          })}
+        </List>
+      ) : <Typography variant="body1" component="p">No results were found 😞. Please try again</Typography>}
     </Container>
   );
 }
