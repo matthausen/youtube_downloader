@@ -20,6 +20,11 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: 400,
     margin: '0 auto'
   },
+  donation: {
+    position: 'absolute',
+    bottom: 20,
+    right: 0
+  },
   input: {
     marginLeft: theme.spacing(1),
     flex: 1,
@@ -32,6 +37,9 @@ const useStyles = makeStyles((theme) => ({
     height: 28,
     margin: 4,
   },
+  paypalImage: {
+    maxWidth: 200
+  }
 }));
 
 export default function SearchBar() {
@@ -80,6 +88,12 @@ export default function SearchBar() {
         </Box>
       </Container>
       {results && <TracksList tracks={results} />}
+      <form action="https://www.paypal.com/donate" className={classes.donation} method="post" target="_top">
+        <input type="hidden" name="hosted_button_id" value="GFM5BFJ346QUJ" />
+        <input className={classes.paypalImage} type="image" src="https://raw.githubusercontent.com/aha999/DonateButtons/master/Paypal.png" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
+        <img alt="" border="0" src="https://www.paypal.com/en_GB/i/scr/pixel.gif" width="1" height="1" />
+      </form>
+
     </>
   );
 }

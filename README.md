@@ -21,8 +21,6 @@ Check latest logs:
 
 ## TODO:
 
-- Add PayPal donation button
-
 - CCI
 
 - Browser logo
