@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles';
 import {
-  Container, Box, Chip, Paper, Avatar, List, ListItem, ListItemIcon, ListItemSecondaryAction, ListItemText, Typography,
+  Container, Box, Button, Chip, Paper, Avatar, List, ListItem, ListItemIcon, ListItemSecondaryAction, ListItemText, Typography,
   Checkbox, IconButton, Tooltip, CircularProgress
 } from '@material-ui/core';
 import ClearAllIcon from '@material-ui/icons/ClearAll';
 import SyncIcon from '@material-ui/icons/Sync';
+import GetAppIcon from '@material-ui/icons/GetApp';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -17,7 +18,16 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: "center",
     alignItems: "center",
-    padding: theme.spacing(4),
+  },
+  button: {
+    backgroundColor: '#ff5252',
+    color: '#ffffff',
+    margin: 4
+  },
+  buttonDownload: {
+    backgroundColor: '#202020',
+    color: '#ff5252',
+    margin: 4
   },
   duration: {
     '& > span': {
@@ -38,16 +48,6 @@ const useStyles = makeStyles((theme) => ({
   chip: {
     backgroundColor: '#ff5252',
     color: '#ffffff'
-  },
-  clearAllIcon: {
-    margin: 10,
-    fontSize: "2rem",
-    color: '#ff5252'
-  },
-  downlaodIcon: {
-    margin: 10,
-    fontSize: '2em',
-    color: '#ff5252'
   },
   listItem: {
     minWidth: 0
@@ -114,7 +114,16 @@ export default function TracksList({ tracks }) {
           <Typography variant="body1" component="p">Converting to mp3...please wait</Typography>
         </>
       )}
-      {ready && <a href={`/api/download-zip`}>Download as .zip</a>}
+      {ready && <a style={{textDecoration: 'none'}} href={`/api/download-zip`}>
+        <Button
+          variant="contained"
+          className={classes.buttonDownload}
+          startIcon={<GetAppIcon />}
+        >
+          Download as .zip
+        </Button>
+      </a>
+      }
       {checked && checked.length > 0 ?
         (
           <Box>
@@ -129,12 +138,22 @@ export default function TracksList({ tracks }) {
               )}
             </div>
             <div className={classes.actions}>
-              <Tooltip title="Download All" aria-label="download-all">
-                <SyncIcon className={classes.downlaodIcon} color="secondary" onClick={() => handleDownload(checked.map(song => song.id))} />
-              </Tooltip>
-              <Tooltip title="Clear All" aria-label="clear-all">
-                <ClearAllIcon className={classes.clearAllIcon} color="secondary" onClick={handleClearAll} />
-              </Tooltip>
+              <Button
+                variant="contained"
+                className={classes.button}
+                onClick={() => handleDownload(checked.map(song => song.id))}
+                startIcon={<SyncIcon />}
+              >
+                Convert to .mp3
+              </Button>
+              <Button
+                variant="contained"
+                className={classes.button}
+                onClick={handleClearAll}
+                startIcon={<ClearAllIcon />}
+              >
+                Clear all
+              </Button>
             </div>
           </Box>
         ) : null

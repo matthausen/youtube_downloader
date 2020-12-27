@@ -23,8 +23,6 @@ Check latest logs:
 
 - Add PayPal donation button
 
-- Plug in in Google Analytics
-
 - CCI
 
 - Browser logo
