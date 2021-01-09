@@ -10,6 +10,7 @@ import IconButton from '@material-ui/core/IconButton';
 import AlbumIcon from '@material-ui/icons/Album';
 import SearchIcon from '@material-ui/icons/Search';
 import MusicNoteIcon from '@material-ui/icons/MusicNote';
+import Hero from '../Hero';
 import TracksList from '../List';
 
 const useStyles = makeStyles((theme) => ({
@@ -64,6 +65,7 @@ export default function SearchBar() {
 
   return (
     <>
+      <Hero />
       <Container>
         <Box p={2}>
           <Paper component="form" className={classes.root} onSubmit={handleSubmit}>
