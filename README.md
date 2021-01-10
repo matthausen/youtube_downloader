@@ -23,6 +23,8 @@ Check latest logs:
 
 ## TODO:
 
+- Add a background job as a worker. Follow the guide here: https://devcenter.heroku.com/articles/python-rq
+
 - CCI
 
 - Browser logo

@@ -3,9 +3,12 @@ from flask_cors import CORS
 import os, glob, re, time
 from youtube_search import YoutubeSearch
 from pytube import YouTube
-import pafy
-import moviepy.editor as mp
-import shutil
+
+from rq import Queue
+from worker import conn
+from utils import download_and_convert
+
+q = Queue(connection=conn)
 
 app = Flask(__name__, static_folder="./client/build/static", template_folder="./client/build")
 
@@ -48,22 +51,9 @@ def download_songs():
 
     body = request.data.decode("utf-8") 
     song_list = eval(body)
-    
-    # Download the file
-    for song in song_list:
-      url = 'https://www.youtube.com/watch?v=' + song
-      pafy.new(url).getbest().download(TMP_FOLDER)
 
-    # Convert file/s to mp3, zip and send to client
-    for file in os.listdir(TMP_FOLDER):
-      if re.search('mp4', file):
-        mp4_path = os.path.join(TMP_FOLDER,file)
-        mp3_path = os.path.join(TMP_FOLDER,os.path.splitext(file)[0]+'.mp3')
-        new_file = mp.AudioFileClip(mp4_path)
-        new_file.write_audiofile(mp3_path)
-        os.remove(mp4_path)
-        os.walk(TMP_FOLDER)
-        shutil.make_archive('Music' + str(time.time()), 'zip', TMP_FOLDER)
+    # start worker here
+    q.enqueue(download_and_convert, 'http://heroku.com')
 
     return Response("Downoad was successful", status=200, mimetype="application/json")
 
