@@ -1,28 +1,18 @@
-[youtubemusicdownload.app](https://www.youtubemusicdownload.app)
+Create a serverless framework project with boilerplate:
 
-This web app allows the user to search artists, albums and tracks via the unofficial YouTube API and to download a single or multiple tracks on their laptop or smartphones as MP3
+- ```serverless create \
+  --template aws-python3 \
+  --name PROJECT-NAME \
+  --path PROJECT-NAME
 
-## Deployment
-This app is deployed as a dyno on Heroku
+Initialise a npm module
 
-Create aan app:
-- `heroku create APP_NAME`
+- `npm init`
 
-Add remote branch:
-- `heroku git:remote -a APP_NAME`
+Install python dependencies with:
 
-Push changes to the branch:
-- `git push heroku BRANCH_NAME:master`
+- `npm install --save serverless-python-requirements`
 
-Bash into application to verify changes:
-- `heroku run bash -a APP_NAME`
+Deploy:
 
-Check latest logs:
-- `heroku logs --tail`
-
-
-## TODO:
-
-- CCI
-
-- Browser logo
+- `serverless deploy`
