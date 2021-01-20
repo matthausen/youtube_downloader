@@ -20,5 +20,6 @@ var/
 .serverless
 
 # Other directories and secrets
+node_modules
 venv
 .env
