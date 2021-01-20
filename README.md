@@ -1,4 +1,4 @@
-Create a serverless framework project with boilerplate:
+Start a serverless framework project with boilerplate:
 
 - ```serverless create \
   --template aws-python3 \
