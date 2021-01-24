@@ -1,0 +1,25 @@
+service: youtubedownloadapp
+
+frameworkVersion: '2'
+
+plugins:
+  - serverless-python-requirements
+
+custom:
+  pythonRequirements:
+    dockerizePip: non-linux
+
+provider:
+  name: aws
+  runtime: python3.8
+  region: eu-west-2
+
+
+functions:
+  get_tracks:
+    handler: handler.get_tracks
+    events:
+      - http:
+          path: get_tracks
+          method: post
+          cors: true
