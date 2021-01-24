@@ -23,3 +23,10 @@ functions:
           path: get_tracks
           method: post
           cors: true
+  download_tracks:
+    handler: handler.download_tracks
+    events:
+      - http:
+          path: download_tracks
+          method: post
+          cors: true

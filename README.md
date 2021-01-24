@@ -1,6 +1,6 @@
 ## TODO
-- add function to search for tracks
-- add function to download tracks to s3 bucket
+- download tracks
+- upload them to s3
 
 ### S3 bucket for tracks
 - `bucket_arn = 'arn:aws:s3:::whitechapel-dev-tracks'`
