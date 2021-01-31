@@ -23,7 +23,8 @@ provider:
          Fn::Join:
            - ""
            - - "arn:aws:s3:::"
-             - Ref: arn:aws:s3:::whitechapel-dev-tracks/*
+             - Ref: "ServerlessDeploymentBucket"
+             - "/*"
 
 
 functions:
@@ -42,3 +43,10 @@ functions:
           method: post
           cors: true
     timeout: 30 # default is 6 sec, max is 900 sec, 30sec dor API gateway
+  download_zip:
+    handler: handler.download_zip
+    events:
+      - http:
+          path: download_zip
+          method: get
+          cors: true
