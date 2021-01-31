@@ -13,6 +13,17 @@ provider:
   name: aws
   runtime: python3.8
   region: eu-west-2
+  timeout: 30
+  iamRoleStatements:
+    -  Effect: "Allow"
+       Action:
+         - "s3:PutObject"
+         - "s3:GetObject"
+       Resource:
+         Fn::Join:
+           - ""
+           - - "arn:aws:s3:::"
+             - Ref: arn:aws:s3:::whitechapel-dev-tracks/*
 
 
 functions:
@@ -30,3 +41,4 @@ functions:
           path: download_tracks
           method: post
           cors: true
+    timeout: 30 # default is 6 sec, max is 900 sec, 30sec dor API gateway

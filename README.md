@@ -1,12 +1,3 @@
-## TODO
-- download tracks
-- upload them to s3
-
-### S3 bucket for tracks
-- `bucket_arn = 'arn:aws:s3:::whitechapel-dev-tracks'`
-
-https://www.serverless.com/blog/serverless-python-packaging
-
 ## Deployment
 Start a serverless framework project with boilerplate:
 
@@ -40,3 +31,8 @@ Deploy:
 Invoke function
 
 - `serverless invoke -f hello --log`
+
+
+### S3 bucket for tracks
+- `bucket_arn = 'arn:aws:s3:::whitechapel-dev-tracks'`
+- `bucket name = whitechapel-dev-tracks`
