@@ -66,9 +66,11 @@ def download_songs(event, _):
 
   for obj in bucket.objects.all():
     key = obj.key
+    
     url = create_presigned_url('whitechapel-dev-tracks', key)
+    
     if url is not None:
-      pre_signed_urls.append(requests.get(url))
+      pre_signed_urls.append(url)
 
   response = {
     "statusCode": 200,
