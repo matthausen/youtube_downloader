@@ -1,11 +1,12 @@
 import json, os, re, glob
+import requests
 from youtube_search import YoutubeSearch
 import pafy
 import boto3
 import moviepy.editor as mp
-from utils import upload_file
+from utils import upload_file, create_presigned_url
 
-def get_tracks(event, context):
+def get_songs(event, context):
 
   search_term = event["body"]
   result = YoutubeSearch(search_term, max_results=20).to_json()
@@ -17,7 +18,7 @@ def get_tracks(event, context):
 
   return response
 
-def download_tracks(event, _):
+def convert_songs(event, _):
   body = event["body"]
   songs = eval(body)
   TMP_FOLDER = '/tmp'
@@ -53,6 +54,25 @@ def download_tracks(event, _):
   response = {
     "statusCode": 200,
     "body": json.dumps(songs)
+  }
+
+  return response
+
+def download_songs(event, _):
+  # read objects in bucket
+  s3 = boto3.resource('s3')
+  bucket = s3.Bucket('whitechapel-dev-tracks')
+  pre_signed_urls = []
+
+  for obj in bucket.objects.all():
+    key = obj.key
+    url = create_presigned_url('whitechapel-dev-tracks', key)
+    if url is not None:
+      pre_signed_urls.append(requests.get(url))
+
+  response = {
+    "statusCode": 200,
+    "body": json.dumps(pre_signed_urls)
   }
 
   return response

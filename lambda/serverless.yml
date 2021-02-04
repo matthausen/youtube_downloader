@@ -28,25 +28,25 @@ provider:
 
 
 functions:
-  get_tracks:
-    handler: handler.get_tracks
+  get_songs:
+    handler: handler.get_songs
     events:
       - http:
-          path: get_tracks
+          path: get_songs
           method: post
           cors: true
-  download_tracks:
-    handler: handler.download_tracks
+  convert_songs:
+    handler: handler.convert_songs
     events:
       - http:
-          path: download_tracks
+          path: convert_songs
           method: post
           cors: true
     timeout: 30 # default is 6 sec, max is 900 sec, 30sec dor API gateway
-  download_zip:
-    handler: handler.download_zip
+  download_songs:
+    handler: handler.download_songs
     events:
       - http:
-          path: download_zip
+          path: download_songs
           method: get
           cors: true
