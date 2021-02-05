@@ -33,6 +33,16 @@ Invoke function
 - `serverless invoke -f hello --log`
 
 
-### S3 bucket for tracks
-- `bucket_arn = 'arn:aws:s3:::whitechapel-dev-tracks'`
-- `bucket name = whitechapel-dev-tracks`
+### TODO
+
+- clean bucket after function is called
+- change endpoints in frontend
+- deploy frontend on s3
+- Redirect domain url
+
+
+### API
+
+post - https://p2en737l46.execute-api.eu-west-2.amazonaws.com/dev/get_tracks
+post - https://p2en737l46.execute-api.eu-west-2.amazonaws.com/dev/download_tracks
+get - https://p2en737l46.execute-api.eu-west-2.amazonaws.com/dev/download_songs

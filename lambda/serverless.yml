@@ -42,7 +42,7 @@ functions:
           path: convert_songs
           method: post
           cors: true
-    timeout: 30 # default is 6 sec, max is 900 sec, 30sec dor API gateway
+    timeout: 30 # default is 6 sec, max is 900 sec, 30sec for API gateway
   download_songs:
     handler: handler.download_songs
     events:

@@ -13,6 +13,9 @@ def get_songs(event, context):
 
   response = {
       "statusCode": 200,
+      "headers": {
+        "Access-Control-Allow-Origin": "*",
+      },
       "body": result
   }
 
@@ -53,6 +56,9 @@ def convert_songs(event, _):
 
   response = {
     "statusCode": 200,
+    "headers": {
+        "Access-Control-Allow-Origin": "*",
+    },
     "body": json.dumps(songs)
   }
 
@@ -74,6 +80,9 @@ def download_songs(event, _):
 
   response = {
     "statusCode": 200,
+    "headers": {
+        "Access-Control-Allow-Origin": "*",
+    },
     "body": json.dumps(pre_signed_urls)
   }
 

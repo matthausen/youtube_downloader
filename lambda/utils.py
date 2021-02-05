@@ -1,8 +1,6 @@
+import logging
 import boto3
 from botocore.exceptions import ClientError
-import os, time
-import moviepy.editor as mp
-import shutil
 
 # upload_file: function  to upload file to s3 bucket as .mp3
 def upload_file(file_name, bucket, object_name=None):
