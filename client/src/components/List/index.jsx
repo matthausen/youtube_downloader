@@ -83,7 +83,7 @@ export default function TracksList({ tracks }) {
 
   const handleDownload = songId => {
     setLoading(true);
-    axios.post(`/api/download-songs`, songId, {
+    axios.post(`https://eflpd2s0h0.execute-api.eu-west-2.amazonaws.com/dev/convert_songs`, songId, {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',

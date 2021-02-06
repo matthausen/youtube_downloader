@@ -4,7 +4,7 @@ from youtube_search import YoutubeSearch
 import pafy
 import boto3
 import moviepy.editor as mp
-from utils import upload_file, create_presigned_url
+from utils import upload_file, create_presigned_url, empty_bucket
 
 def get_songs(event, context):
 
@@ -25,11 +25,16 @@ def convert_songs(event, _):
   body = event["body"]
   songs = eval(body)
   TMP_FOLDER = '/tmp'
+  bucket_name = "whitechapel-dev-tracks"
 
-  # aws lambda allows to write only in /tmp/tracks folder
+  # Empty the S3 bucket
+  empty_bucket(bucket_name)
+
+  # aws lambda allows to write only in /tmp folder
   os.chdir(TMP_FOLDER)
-  new_dir = os.path.join(TMP_FOLDER, 'tracks')
-  os.mkdir(new_dir)
+  new_dir = os.path.join(TMP_FOLDER, 'songs')
+  if not os.path.exists('songs'):
+    os.mkdir(new_dir)
   os.chdir(new_dir)
    
    # Download all tracks videos as .mp4
@@ -40,9 +45,7 @@ def convert_songs(event, _):
   # Upload to s3 
   for file in glob.glob("*.mp4"):
     mp4_path = os.path.join(os.getcwd(),file)
-    print(mp4_path)
     mp3_path = os.path.join(os.getcwd(),os.path.splitext(file)[0]+'.mp3')
-    print(mp3_path)
     new_file = mp.AudioFileClip(mp4_path)
     new_file.write_audiofile(mp3_path)  
     os.remove(mp4_path)
@@ -52,7 +55,7 @@ def convert_songs(event, _):
   for file in glob.glob("*.mp3"):
     print(f'Uploading {file} to the bucket ...')
     with open(file, "rb") as f:
-      s3.upload_fileobj(f, "whitechapel-dev-tracks", file)
+      s3.upload_fileobj(f, bucket_name, file)
 
   response = {
     "statusCode": 200,
