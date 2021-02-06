@@ -35,7 +35,5 @@ Invoke function
 
 ### TODO
 
-- clean bucket after function is called
-- change endpoints in frontend
 - deploy frontend on s3
 - Redirect domain url
