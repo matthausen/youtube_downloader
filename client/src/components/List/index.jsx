@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles';
 import {
-  Container, Box, Button, Chip, Paper, Avatar, List, ListItem, ListItemIcon, ListItemSecondaryAction, ListItemText, Typography,
+  Container, Box, Button, Chip, Paper, Avatar, Link, List, ListItem, ListItemIcon, ListItemSecondaryAction, ListItemText, Typography,
   Checkbox, IconButton, Tooltip, CircularProgress
 } from '@material-ui/core';
 import ClearAllIcon from '@material-ui/icons/ClearAll';
@@ -49,6 +49,9 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: '#ff5252',
     color: '#ffffff'
   },
+  invisible: {
+    display: 'none'
+  },
   listItem: {
     minWidth: 0
   },
@@ -64,9 +67,8 @@ const useStyles = makeStyles((theme) => ({
 export default function TracksList({ tracks }) {
   const classes = useStyles();
   const [checked, setChecked] = useState([]);
-  const [ready, setReady] = useState(false);
   const [loading, setLoading] = useState(false);
-
+  const [presignedUrls, setPresignedUrls] = useState();
 
   const handleToggle = value => () => {
     const currentIndex = checked.indexOf(value);
@@ -81,20 +83,24 @@ export default function TracksList({ tracks }) {
     setChecked(newChecked);
   };
 
+  const downloadAsMp3 = () => {
+    axios.get('https://eflpd2s0h0.execute-api.eu-west-2.amazonaws.com/dev/download_songs')
+      .then(res => setPresignedUrls(res.data))
+  }
+
   const handleDownload = songId => {
     setLoading(true);
-    axios.post(`/api/download-songs`, songId, {
+    axios.post(`https://eflpd2s0h0.execute-api.eu-west-2.amazonaws.com/dev/convert_songs`, songId, {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       }
     }).then(res => {
       if (res.status === 200) {
-        console.log(`The response: ${res}`);
         setLoading(false);
-        setReady(true);
       }
-    });
+    })
+      .finally(() => downloadAsMp3());
   }
 
   const handleDeleteFromList = song => {
@@ -114,16 +120,18 @@ export default function TracksList({ tracks }) {
           <Typography variant="body1" component="p">Converting to mp3...please wait</Typography>
         </>
       )}
-      {ready && <a style={{textDecoration: 'none'}} href={`/api/download-zip`}>
-        <Button
-          variant="contained"
-          className={classes.buttonDownload}
-          startIcon={<GetAppIcon />}
-        >
-          Download as .zip
+      {presignedUrls ? presignedUrls.map(p =>
+        <Link href={p}>
+          <Button
+            variant="contained"
+            className={classes.buttonDownload}
+            startIcon={<GetAppIcon />}
+            onClick={downloadAsMp3}
+          >
+            Download
         </Button>
-      </a>
-      }
+        </Link>
+      ) : null}
       {checked && checked.length > 0 ?
         (
           <Box>

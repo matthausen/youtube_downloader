@@ -1,28 +1,41 @@
-[youtubemusicdownload.app](https://www.youtubemusicdownload.app)
-
-This web app allows the user to search artists, albums and tracks via the unofficial YouTube API and to download a single or multiple tracks on their laptop or smartphones as MP3
-
 ## Deployment
-This app is deployed as a dyno on Heroku
+Start a serverless framework project with boilerplate:
 
-Create aan app:
-- `heroku create APP_NAME`
+- ```serverless create \
+  --template aws-python3 \
+  --name PROJECT-NAME \
+  --path PROJECT-NAME
 
-Add remote branch:
-- `heroku git:remote -a APP_NAME`
+Initialise a npm module
 
-Push changes to the branch:
-- `git push heroku BRANCH_NAME:master`
+- `npm init`
 
-Bash into application to verify changes:
-- `heroku run bash -a APP_NAME`
+Manage python dependencies installing:
 
-Check latest logs:
-- `heroku logs --tail`
+- `npm install --save serverless-python-requirements`
+
+Inject python dependencies:
+
+- `plugins:
+  - serverless-python-requirements
+
+custom:
+  pythonRequirements:
+    dockerizePip: non-linux`
+
+Deploy:
+
+- `serverless deploy` or
+- `sls deploy`
+
+Invoke function
+
+- `serverless invoke -f hello --log`
 
 
-## TODO:
+### TODO
 
-- CCI
-
-- Browser logo
+- clean bucket after function is called
+- change endpoints in frontend
+- deploy frontend on s3
+- Redirect domain url
