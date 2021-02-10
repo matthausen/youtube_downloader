@@ -1,3 +1,11 @@
+# YouTube Music DOwnload App
+
+Search for songs and artists with the python youtube api and select one or more songs to download directly from your browser.
+
+PS:
+There is a limit of 30 seconds execution. Make sure your connection is stable
+
+
 ## Deployment
 Start a serverless framework project with boilerplate:
 
@@ -33,7 +41,3 @@ Invoke function
 - `serverless invoke -f hello --log`
 
 
-### TODO
-
-- deploy frontend on s3
-- Redirect domain url
