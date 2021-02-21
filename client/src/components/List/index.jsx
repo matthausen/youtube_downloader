@@ -96,6 +96,7 @@ export default function TracksList({ tracks }) {
 
   const handleDownload = songId => {
     setLoading(true);
+    setPresignedUrls([]);
     axios.post(`https://eflpd2s0h0.execute-api.eu-west-2.amazonaws.com/dev/convert_songs`, songId, {
       headers: {
         Accept: 'application/json',
@@ -118,7 +119,7 @@ export default function TracksList({ tracks }) {
     setChecked(newChecked);
   }
 
-  const handleClearAll = () => setChecked([]);
+  // const handleClearAll = () => setChecked([]);
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -170,14 +171,14 @@ export default function TracksList({ tracks }) {
               >
                 Convert to .mp3
               </Button>
-              <Button
+              {/* <Button
                 variant="contained"
                 className={classes.button}
                 onClick={handleClearAll}
                 startIcon={<ClearAllIcon />}
               >
                 Clear all
-              </Button>
+              </Button> */}
             </div>
           </Box>
         ) : null

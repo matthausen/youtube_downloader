@@ -2,13 +2,6 @@
 
 Search for songs and artists with the python youtube api and select one or more songs to download directly from your browser.
 
-### TODO:
-
-- Change the UI:
-- Change donation button
-- Allow only one download at the time
-- Add tooltip explaining the 30sec limit
-
 ## Deployment
 Start a serverless framework project with boilerplate:
 
