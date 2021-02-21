@@ -1,10 +1,13 @@
-# YouTube Music DOwnload App
+# YouTube Music Download App
 
 Search for songs and artists with the python youtube api and select one or more songs to download directly from your browser.
 
-PS:
-There is a limit of 30 seconds execution. Make sure your connection is stable
+### TODO:
 
+- Change the UI:
+- Change donation button
+- Allow only one download at the time
+- Add tooltip explaining the 30sec limit
 
 ## Deployment
 Start a serverless framework project with boilerplate:

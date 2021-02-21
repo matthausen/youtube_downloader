@@ -3,8 +3,9 @@ import axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   Container, Box, Button, Chip, Paper, Avatar, Link, List, ListItem, ListItemIcon, ListItemSecondaryAction, ListItemText, Typography,
-  Checkbox, IconButton, Tooltip, CircularProgress
+  Checkbox, IconButton, Tooltip, CircularProgress, Snackbar
 } from '@material-ui/core';
+import MuiAlert from '@material-ui/lab/Alert';
 import ClearAllIcon from '@material-ui/icons/ClearAll';
 import SyncIcon from '@material-ui/icons/Sync';
 import GetAppIcon from '@material-ui/icons/GetApp';
@@ -20,13 +21,13 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
   },
   button: {
-    backgroundColor: '#ff5252',
+    backgroundColor: 'rgb(255,68,76)',
     color: '#ffffff',
     margin: 4
   },
   buttonDownload: {
     backgroundColor: '#202020',
-    color: '#ff5252',
+    color: 'rgb(255,68,76)',
     margin: 4
   },
   duration: {
@@ -43,10 +44,10 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   whitechapelColor: {
-    color: '#ff5252'
+    color: 'rgb(255,68,76)'
   },
   chip: {
-    backgroundColor: '#ff5252',
+    backgroundColor: 'rgb(255,68,76)',
     color: '#ffffff'
   },
   invisible: {
@@ -64,11 +65,16 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
 export default function TracksList({ tracks }) {
   const classes = useStyles();
   const [checked, setChecked] = useState([]);
   const [loading, setLoading] = useState(false);
   const [presignedUrls, setPresignedUrls] = useState();
+  const [open, setOpen] = useState(false);
 
   const handleToggle = value => () => {
     const currentIndex = checked.indexOf(value);
@@ -98,6 +104,8 @@ export default function TracksList({ tracks }) {
     }).then(res => {
       if (res.status === 200) {
         setLoading(false);
+      } else {
+        setOpen(true);
       }
     })
       .finally(() => downloadAsMp3());
@@ -111,6 +119,14 @@ export default function TracksList({ tracks }) {
   }
 
   const handleClearAll = () => setChecked([]);
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
 
   return (
     <Container maxWidth="lg">
@@ -174,29 +190,34 @@ export default function TracksList({ tracks }) {
             const labelId = `checkbox-list-label-${title}`;
 
             return (
-              <Paper className={classes.songCard} elevation={3}>
-                <ListItem key={id} role={undefined} dense button onClick={handleToggle(value)}>
-                  <ListItemIcon className={classes.listItem}>
-                    <Checkbox
+              <>
+                <Paper className={classes.songCard} elevation={3}>
+                  <ListItem key={id} role={undefined} dense button onClick={handleToggle(value)}>
+                    <ListItemIcon className={classes.listItem}>
+                      {/* <Checkbox
                       edge="start"
                       checked={checked.indexOf(value) !== -1}
                       tabIndex={-1}
                       disableRipple
                       inputProps={{ 'aria-labelledby': labelId }}
-                    />
-                  </ListItemIcon>
-                  <Avatar className={classes.thumbnail} alt="thumbnail" src={thumbnails[0]} />
-                  <ListItemText id={labelId} primary={`${title}`} />
-                  <ListItemText className={classes.duration} id={labelId} primary={`min ${duration}`} />
-                  <ListItemSecondaryAction>
-                    <Tooltip title="Convert song to mp3" aria-label="convert-song">
-                      <IconButton edge="end" aria-label="comments">
-                        <SyncIcon onClick={() => handleDownload([id])} />
-                      </IconButton>
-                    </Tooltip>
-                  </ListItemSecondaryAction>
-                </ListItem>
-              </Paper>
+                    /> */}
+                    </ListItemIcon>
+                    <Avatar className={classes.thumbnail} alt="thumbnail" src={thumbnails[0]} />
+                    <ListItemText id={labelId} primary={`${title}`} />
+                    <ListItemText className={classes.duration} id={labelId} primary={`min ${duration}`} />
+                    <ListItemSecondaryAction>
+                      <Tooltip title="Convert song to mp3" aria-label="convert-song">
+                        <IconButton edge="end" aria-label="comments">
+                          <SyncIcon onClick={() => handleDownload([id])} />
+                        </IconButton>
+                      </Tooltip>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                </Paper>
+                <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+                  <Alert onClose={handleClose} severity="error">Server timed out while downloading. Please try again</Alert>
+                </Snackbar>
+              </>
             );
           })}
         </List>
